@@ -1,3 +1,12 @@
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,7 +18,6 @@
  * @author Felipe Guerra
  */
 public class PainelLogin extends javax.swing.JFrame {
-
     /**
      * Creates new form PainelLogin
      */
@@ -124,36 +132,50 @@ public class PainelLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
-        // TODO add your handling code here:
-        Aluno a1 = new Aluno("aluno@teste.com", "aluno", "Felipe Guerra");
-        Professor p1 = new Professor("professor@teste.com", "professor", "Fontes");
-        Servidor s1 = new Servidor("servidor@teste.com", "servidor", "Matheus");
-        
-        a1.setCurso("Ciência da Computação");
-        a1.setSemestre("4º Semestre");
-        
-        p1.setEspecialidade("Computação");
-        
-        s1.setArea("Administrativo");
-        
-        String email = txtEmail.getText();
-        String senha = txtSenha.getText();
-        
-        if(email.equals(a1.getEmail()) && senha.equals(a1.getSenha())){
-            txtTexto.setVisible(true);
-            txtTexto.setText("Bem vindo! " + a1.getNome() + " você é um aluno do " + a1.getSemestre()
-            + " do curso de " + a1.getCurso());
-        } else if(email.equals(p1.getEmail()) && senha.equals(p1.getSenha())){
-            txtTexto.setVisible(true);
-            txtTexto.setText("Bem vindo! " + p1.getNome() + " você é um professor de " + 
-                    p1.getEspecialidade());
-        } else if(email.equals(s1.getEmail()) && senha.equals(s1.getSenha())){
-            txtTexto.setVisible(true);
-            txtTexto.setText("Bem vindo! " + s1.getNome() + " você é um servidor do " + 
-                    s1.getArea()); 
-        } else {
-            txtTexto.setVisible(true);
-            txtTexto.setText("E-mail ou senha incorretos, favor conferir seus dados.");
+        try {
+            // TODO add your handling code here:
+            
+            Aluno a1 = new Aluno("aluno@teste.com", "aluno", "Felipe Guerra");
+            Professor p1 = new Professor("professor@teste.com", "professor", "Fontes");
+            Servidor s1 = new Servidor("servidor@teste.com", "servidor", "Matheus");
+            
+            a1.setCurso("Ciência da Computação");
+            a1.setSemestre("4º Semestre");
+            
+            p1.setEspecialidade("Computação");
+            
+            s1.setArea("Administrativo");
+            
+            String email = txtEmail.getText();
+            String senha = txtSenha.getText();
+            
+            if(email.equals(a1.getEmail()) && senha.equals(a1.getSenha())){
+                Socket cliente = new Socket("127.0.0.1", 12345);
+                PrintStream saida = new PrintStream(cliente.getOutputStream());
+                txtTexto.setVisible(true);
+                txtTexto.setText("Bem vindo! " + a1.getNome() + " você é um aluno do " + a1.getSemestre()
+                        + " do curso de " + a1.getCurso());
+                saida.close();
+            } else if(email.equals(p1.getEmail()) && senha.equals(p1.getSenha())){
+                Socket cliente = new Socket("127.0.0.1", 12345);
+                PrintStream saida = new PrintStream(cliente.getOutputStream());
+                txtTexto.setVisible(true);
+                txtTexto.setText("Bem vindo! " + p1.getNome() + " você é um professor de " + p1.getEspecialidade());
+                saida.close();
+            } else if(email.equals(s1.getEmail()) && senha.equals(s1.getSenha())){
+                Socket cliente = new Socket("127.0.0.1", 12345);
+                PrintStream saida = new PrintStream(cliente.getOutputStream());
+                txtTexto.setVisible(true);
+                txtTexto.setText("Bem vindo! " + s1.getNome() + " você é um servidor do " +
+                        s1.getArea());
+                saida.close();
+            } else {
+                txtTexto.setVisible(true);
+                txtTexto.setText("E-mail ou senha incorretos, favor conferir seus dados.");
+
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PainelLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
